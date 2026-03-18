@@ -1,0 +1,28 @@
+qchem-core/
+│
+├── pyproject.toml
+│
+└── qchem/
+    ├── __init__.py
+    ├── molecule.py
+    ├── basis.py
+    ├── linalg.py
+    │
+    ├── integrals/
+    │   ├── boys.py
+    │   ├── overlap.py
+    │   ├── kinetic.py
+    │   ├── nuclear.py
+    │   ├── eri.py
+    │   └── magnetic.py
+    │
+    ├── scf/
+    │   ├── density.py
+    │   ├── fock.py
+    │   ├── diis.py
+    │   └── hartree_fock.py
+    │
+    └── dft/
+        ├── grid.py
+        ├── xc.py
+        └── ks.py
