@@ -29,13 +29,9 @@ Test hierarchy
    (11|11) diagonal, and exactly satisfy all 8-fold symmetry relations.
 
 6. Finite-difference derivative consistency
-   Shifting centre A by ε and computing the numerical derivative of
-   (ss|ss) with respect to the x-coordinate of A should agree with
-   the analytic result obtained from the (ps|ss) integral via the
-   recurrence identity
-       ∂/∂Ax (ss|ss) = −2α (px s | ss)
-   (differentiation of the Gaussian at A with exponent α gives a
-   p-type function, up to the normalisation-free sign).
+   The Gaussian derivative identity is ∂/∂Ax φ_s(r; α, A) = +2α φ_{px},
+   so the identity tested is:
+       ∂/∂Ax (ss|ss) = +2α (px s | ss)
 
 7. p-type and d-type angular momentum
    Spot-check several specific integrals involving p and d functions
@@ -370,10 +366,10 @@ class TestDerivativeConsistency:
     numerical derivative of the s-type integral with respect to a centre.
 
     The Gaussian derivative identity for the bra gives:
-        ∂/∂Ax φ_s(r; α, A) = −2α φ_{px}(r; α, A)
+        ∂/∂Ax φ_s(r; α, A) = +2α φ_{px}(r; α, A)
 
     so
-        ∂/∂Ax (ss|ss)[A] = −2α (px s | ss)
+        ∂/∂Ax (ss|ss)[A] = +2α (px s | ss)
 
     modulo the convention that (px s | ss) uses the *unnormalised*
     p-type function exp(−α|r−A|²)·(x−Ax).
@@ -400,8 +396,8 @@ class TestDerivativeConsistency:
               - eri_primitive((0,0,0),(0,0,0),(0,0,0),(0,0,0),
                               alpha, beta, gamma, delta, Am, B, C, D)) / (2 * eps)
 
-        # Analytical: ∂/∂Ax (ss|ss) = −2α (px s | ss)
-        analytic = -2.0 * alpha * eri_primitive(
+        # Analytical: ∂/∂Ax (ss|ss) = +2α (px s | ss)
+        analytic = +2.0 * alpha * eri_primitive(
             (1,0,0), (0,0,0), (0,0,0), (0,0,0),
             alpha, beta, gamma, delta, A, B, C, D)
 
@@ -476,7 +472,7 @@ class TestHigherAngularMomentum:
               - eri_primitive((0,0,0),(0,0,0),(0,0,0),(0,0,0),
                               alpha, beta, gamma, delta,
                               A - np.array([eps,0,0]), B, C, D)) / (2 * eps)
-        analytic = -2.0 * alpha * eri_primitive(
+        analytic = +2.0 * alpha * eri_primitive(
             (1,0,0), (0,0,0), (0,0,0), (0,0,0),
             alpha, beta, gamma, delta, A, B, C, D)
         assert fd == pytest.approx(analytic, rel=1e-7, abs=1e-12)
@@ -517,7 +513,7 @@ class TestHigherAngularMomentum:
 
     def test_dpps_finite_diff_z(self):
         """
-        (pz s | ss) consistent with ∂/∂Az (ss|ss) = −2α (pz s | ss).
+        (pz s | ss) consistent with ∂/∂Az (ss|ss) = +2α (pz s | ss).
         """
         alpha, beta, gamma, delta = 0.9, 0.7, 1.4, 0.5
         A = np.array([0.3, 0.1, 0.0])
@@ -531,7 +527,7 @@ class TestHigherAngularMomentum:
               - eri_primitive((0,0,0),(0,0,0),(0,0,0),(0,0,0),
                               alpha, beta, gamma, delta,
                               A - np.array([0,0,eps]), B, C, D)) / (2 * eps)
-        analytic = -2.0 * alpha * eri_primitive(
+        analytic = +2.0 * alpha * eri_primitive(
             (0,0,1), (0,0,0), (0,0,0), (0,0,0),
             alpha, beta, gamma, delta, A, B, C, D)
         assert fd == pytest.approx(analytic, rel=1e-7, abs=1e-12)

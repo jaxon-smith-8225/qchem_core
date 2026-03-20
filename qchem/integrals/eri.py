@@ -12,12 +12,12 @@ Stage 1 — Vertical Recurrence Relation (VRR)
     producing auxiliary integrals [a|c]^(m).  The recurrences are:
 
         [a+1ᵢ|c]^(m) = (P−A)ᵢ  [a|c]^(m)
-                       − (ζ/p)(W−P)ᵢ  [a|c]^(m+1)
+                       + (W−P)ᵢ  [a|c]^(m+1)
                        +  aᵢ/(2p)   ([a−1ᵢ|c]^(m)  − (ζ/p)[a−1ᵢ|c]^(m+1))
                        +  cᵢ/(2(p+q)) [a|c−1ᵢ]^(m+1)
 
         [a|c+1ᵢ]^(m) = (Q−C)ᵢ  [a|c]^(m)
-                       − (ζ/q)(W−Q)ᵢ  [a|c]^(m+1)
+                       + (W−Q)ᵢ  [a|c]^(m+1)
                        +  cᵢ/(2q)   ([a|c−1ᵢ]^(m)  − (ζ/q)[a|c−1ᵢ]^(m+1))
                        +  aᵢ/(2(p+q)) [a−1ᵢ|c]^(m+1)
 
@@ -120,7 +120,7 @@ def _eri_vrr(a_max: tuple, c_max: tuple,
         for m in range(m_max - ax + 1):
             R[ax, 0, 0, 0, 0, 0, m] = (
                 PA[0] * R[ax-1, 0, 0, 0, 0, 0, m]
-                - (zeta/p) * WP[0] * R[ax-1, 0, 0, 0, 0, 0, m+1]
+                + WP[0] * R[ax-1, 0, 0, 0, 0, 0, m+1]
             )
             if ax >= 2:
                 R[ax, 0, 0, 0, 0, 0, m] += (ax-1) / (2*p) * (
@@ -133,7 +133,7 @@ def _eri_vrr(a_max: tuple, c_max: tuple,
             for m in range(m_max - ax - ay + 1):
                 R[ax, ay, 0, 0, 0, 0, m] = (
                     PA[1] * R[ax, ay-1, 0, 0, 0, 0, m]
-                    - (zeta/p) * WP[1] * R[ax, ay-1, 0, 0, 0, 0, m+1]
+                    + WP[1] * R[ax, ay-1, 0, 0, 0, 0, m+1]
                 )
                 if ay >= 2:
                     R[ax, ay, 0, 0, 0, 0, m] += (ay-1) / (2*p) * (
@@ -147,7 +147,7 @@ def _eri_vrr(a_max: tuple, c_max: tuple,
                 for m in range(m_max - ax - ay - az + 1):
                     R[ax, ay, az, 0, 0, 0, m] = (
                         PA[2] * R[ax, ay, az-1, 0, 0, 0, m]
-                        - (zeta/p) * WP[2] * R[ax, ay, az-1, 0, 0, 0, m+1]
+                        + WP[2] * R[ax, ay, az-1, 0, 0, 0, m+1]
                     )
                     if az >= 2:
                         R[ax, ay, az, 0, 0, 0, m] += (az-1) / (2*p) * (
@@ -164,7 +164,7 @@ def _eri_vrr(a_max: tuple, c_max: tuple,
                     for m in range(m_max - ax - ay - az - cx + 1):
                         R[ax, ay, az, cx, 0, 0, m] = (
                             QC[0] * R[ax, ay, az, cx-1, 0, 0, m]
-                            - (zeta/q) * WQ[0] * R[ax, ay, az, cx-1, 0, 0, m+1]
+                            + WQ[0] * R[ax, ay, az, cx-1, 0, 0, m+1]
                         )
                         if cx >= 2:
                             R[ax, ay, az, cx, 0, 0, m] += (cx-1) / (2*q) * (
@@ -185,7 +185,7 @@ def _eri_vrr(a_max: tuple, c_max: tuple,
                         for m in range(m_max - ax - ay - az - cx - cy + 1):
                             R[ax, ay, az, cx, cy, 0, m] = (
                                 QC[1] * R[ax, ay, az, cx, cy-1, 0, m]
-                                - (zeta/q) * WQ[1] * R[ax, ay, az, cx, cy-1, 0, m+1]
+                                + WQ[1] * R[ax, ay, az, cx, cy-1, 0, m+1]
                             )
                             if cy >= 2:
                                 R[ax, ay, az, cx, cy, 0, m] += (cy-1) / (2*q) * (
@@ -207,7 +207,7 @@ def _eri_vrr(a_max: tuple, c_max: tuple,
                             for m in range(m_max - ax - ay - az - cx - cy - cz + 1):
                                 R[ax, ay, az, cx, cy, cz, m] = (
                                     QC[2] * R[ax, ay, az, cx, cy, cz-1, m]
-                                    - (zeta/q) * WQ[2] * R[ax, ay, az, cx, cy, cz-1, m+1]
+                                    + WQ[2] * R[ax, ay, az, cx, cy, cz-1, m+1]
                                 )
                                 if cz >= 2:
                                     R[ax, ay, az, cx, cy, cz, m] += (cz-1) / (2*q) * (
