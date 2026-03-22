@@ -1,18 +1,5 @@
 import numpy as np
-from scipy.special import factorial2
-
-
-def _double_factorial(n: int) -> float:
-    """
-    Double factorial with the convention that (-1)!! = 1.
-
-    TODO: move to qchem/linalg.py (or a shared utils module) once that
-    module exists — this function is duplicated in the test helpers and
-    should live in exactly one place.
-    """
-    if n <= 0:
-        return 1.0
-    return float(factorial2(n))
+from ..linalg import double_factorial as _double_factorial
 
 
 def norm_primitive(alpha: float, angular: tuple) -> float:
