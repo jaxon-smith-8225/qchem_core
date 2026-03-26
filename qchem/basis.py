@@ -28,7 +28,7 @@ parsing a Basis Set Exchange NWChem-format string with load_nwchem().
 
 Units
 -----
-All coordinates are in **bohr** (atomic units).  Input geometry is almost
+All coordinates are in bohr (atomic units).  Input geometry is almost
 always supplied in Ångström; use angstrom_to_bohr() before calling
 build_basis(), or pass angstrom=True to build_basis().
 
