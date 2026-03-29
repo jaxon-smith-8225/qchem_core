@@ -50,7 +50,8 @@ Helgaker, Jørgensen & Olsen, "Molecular Electronic-Structure Theory",
     Wiley (2000), §9.2.
 Szabo & Ostlund, "Modern Quantum Chemistry", Dover (1989), Appendix A.
 """
-
+from concurrent.futures import ProcessPoolExecutor
+import os
 import numpy as np
 from .boys import boys_array
 from .overlap import norm_primitive
@@ -481,6 +482,15 @@ def eri_contracted(shell_a: dict, shell_b: dict,
 # Full ERI tensor
 # ---------------------------------------------------------------------------
 
+def _compute_quartet_chunk(args):
+    basis, quartet_indices = args
+    results = []
+    for i, j, k, l in quartet_indices:
+        # print(f'i: {i}, j: {j}, k: {k}, l: {l}')
+        val = eri_contracted(basis[i], basis[j], basis[k], basis[l])
+        results.append((i, j, k, l, val))
+    return results
+
 def build_eri_tensor(basis: list) -> np.ndarray:
     """
     Build the full (N, N, N, N) ERI tensor for a list of contracted basis
@@ -503,25 +513,29 @@ def build_eri_tensor(basis: list) -> np.ndarray:
           8 permutations of the index pairs.
     """
     n = len(basis)
-    ERI = np.zeros((n, n, n, n))
-
+    eri = np.zeros((n, n, n, n))
+    
+    # collect unique quartets
+    quartets = []
     for i in range(n):
         for j in range(i + 1):
             ij = i * (i + 1) // 2 + j
             for k in range(n):
                 for l in range(k + 1):
                     kl = k * (k + 1) // 2 + l
-                    if ij < kl:
-                        continue
-                    val = eri_contracted(basis[i], basis[j],
-                                         basis[k], basis[l])
-                    # Apply all 8 symmetry copies simultaneously
-                    for ii, jj, kk, ll in [
-                        (i, j, k, l), (j, i, k, l),
-                        (i, j, l, k), (j, i, l, k),
-                        (k, l, i, j), (l, k, i, j),
-                        (k, l, j, i), (l, k, j, i),
-                    ]:
-                        ERI[ii, jj, kk, ll] = val
-
-    return ERI
+                    if ij >= kl:
+                        quartets.append((i, j, k, l))
+    
+    # split into chunks, one per worker
+    n_workers = os.cpu_count()
+    chunks = [quartets[i::n_workers] for i in range(n_workers)]
+    
+    with ProcessPoolExecutor(max_workers=n_workers) as ex:
+        for results in ex.map(_compute_quartet_chunk, 
+                              [(basis, chunk) for chunk in chunks]):
+            for i, j, k, l, val in results:
+                # fill all 8 symmetry-equivalent elements
+                eri[i,j,k,l] = eri[j,i,k,l] = eri[i,j,l,k] = eri[j,i,l,k] = \
+                eri[k,l,i,j] = eri[l,k,i,j] = eri[k,l,j,i] = eri[l,k,j,i] = val
+    
+    return eri
