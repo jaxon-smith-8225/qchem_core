@@ -300,9 +300,7 @@ def rhf(
     H   = core_hamiltonian(T, V)
 
     # Two-electron integrals (O(N^4), computed once)
-    print('before')
     ERI = build_eri_tensor(basis)
-    print('after')
 
     # Nuclear repulsion energy (constant)
     e_nuclear = mol.nuclear_repulsion()
