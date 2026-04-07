@@ -13,8 +13,7 @@ qchem-core/
     │   ├── overlap.py
     │   ├── kinetic.py
     │   ├── nuclear.py
-    │   ├── eri.py
-    │   └── magnetic.py
+    │   └── eri.py
     │
     ├── scf/
     │   ├── density.py
