@@ -150,9 +150,11 @@ def _hrr(T_vrr: np.ndarray, a: tuple, b: tuple,
                 H[ax, ay, az, 0, 0, 0] = T_vrr[ax, ay, az, 0]
 
     # Transfer angular momentum to bx
-    # Bounds: ax runs 0..a[0]; ax+1 <= a[0]+1 <= a[0]+b[0] = ax_max  (b[0]>=1)
+    # At step bx, H[ax, ay, az, bx, 0, 0] is filled for ax = 0 .. a[0]+b[0]-bx.
+    # This is needed so that the next bx step can access H[ax+1, ..., bx, ...].
     for bx in range(1, b[0] + 1):
-        for ax in range(a[0] + 1):
+        ax_lim = a[0] + b[0] - bx + 1
+        for ax in range(ax_lim):
             for ay in range(ay_max + 1):
                 for az in range(az_max + 1):
                     H[ax, ay, az, bx, 0, 0] = (
@@ -161,12 +163,13 @@ def _hrr(T_vrr: np.ndarray, a: tuple, b: tuple,
                     )
 
     # Transfer angular momentum to by
-    # After the bx pass, H[ax, ay, az, bx, 0, 0] is valid for all bx.
-    # Bounds: ay runs 0..a[1]; ay+1 <= a[1]+1 <= a[1]+b[1] = ay_max  (b[1]>=1)
+    # At step by, H[ax, ay, az, bx, by, 0] is filled for ay = 0 .. a[1]+b[1]-by.
+    # This is needed so that the next by step can access H[ax, ay+1, ..., by, ...].
     for by in range(1, b[1] + 1):
+        ay_lim = a[1] + b[1] - by + 1
         for bx in range(b[0] + 1):
             for ax in range(a[0] + 1):
-                for ay in range(a[1] + 1):
+                for ay in range(ay_lim):
                     for az in range(az_max + 1):
                         H[ax, ay, az, bx, by, 0] = (
                             H[ax, ay + 1, az, bx, by - 1, 0]
@@ -174,13 +177,14 @@ def _hrr(T_vrr: np.ndarray, a: tuple, b: tuple,
                         )
 
     # Transfer angular momentum to bz
-    # Bounds: az runs 0..a[2]; az+1 <= a[2]+1 <= a[2]+b[2] = az_max  (b[2]>=1)
+    # At step bz, H[ax, ay, az, bx, by, bz] is filled for az = 0 .. a[2]+b[2]-bz.
     for bz in range(1, b[2] + 1):
+        az_lim = a[2] + b[2] - bz + 1
         for by in range(b[1] + 1):
             for bx in range(b[0] + 1):
                 for ax in range(a[0] + 1):
                     for ay in range(a[1] + 1):
-                        for az in range(a[2] + 1):
+                        for az in range(az_lim):
                             H[ax, ay, az, bx, by, bz] = (
                                 H[ax, ay, az + 1, bx, by, bz - 1]
                                 + AB[2] * H[ax, ay, az, bx, by, bz - 1]
