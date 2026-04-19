@@ -6,7 +6,7 @@
 
 A ground-up implementation of Hartree–Fock and Kohn–Sham DFT in Python,
 built from the integral primitives up. No external quantum-chemistry
-dependencies — just NumPy and SciPy.
+dependencies — just NumPy and SciPy
 
 ## What's inside
 
