@@ -37,7 +37,8 @@ from qchem.dft.ks import ks
 # Water molecule, geometry in Ångström
 h2o = Molecule([('O',  [0.000,  0.000,  0.117]),
                 ('H',  [0.000,  0.755, -0.468]),
-                ('H',  [0.000, -0.755, -0.468])])
+                ('H',  [0.000, -0.755, -0.468])],
+                angstrom = True)
 
 # Hartree–Fock
 hf_result = rhf(h2o, basis_name="sto-3g")
