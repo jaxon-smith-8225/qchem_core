@@ -41,11 +41,11 @@ h2o = Molecule([('O',  [0.000,  0.000,  0.117]),
 
 # Hartree–Fock
 hf_result = rhf(h2o, basis_name="sto-3g")
-print(f"HF energy:  {hf_result.homo_energy:.6f} Ha")
+print(f"HF energy:  {hf_result.e_total:.6f} Ha")
 
 # Kohn–Sham DFT with PBE
 ks_result = ks(h2o, basis_name="sto-3g", functional="pbe")
-print(f"KS-PBE energy: {ks_result.homo_energy:.6f} Ha")
+print(f"KS-PBE energy: {ks_result.e_total:.6f} Ha")
 ```
 
 ## Running tests
