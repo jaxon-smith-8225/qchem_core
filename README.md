@@ -35,22 +35,17 @@ from qchem.scf.hartree_fock import rhf
 from qchem.dft.ks import ks
 
 # Water molecule, geometry in Ångström
-h2o = Molecule(
-    atoms=["O", "H", "H"],
-    coords=[
-        [0.000,  0.000,  0.117],
-        [0.000,  0.755, -0.468],
-        [0.000, -0.755, -0.468],
-    ],
-)
+h2o = Molecule([('O',  [0.000,  0.000,  0.000]),
+                ('H',  [0.000,  1.430,  1.107]),
+                ('H',  [0.000, -1.430,  1.107])])
 
 # Hartree–Fock
 hf_result = rhf(h2o, basis_name="sto-3g")
-print(f"HF energy:  {hf_result.energy:.6f} Ha")
+print(f"HF energy:  {hf_result.homo_energy:.6f} Ha")
 
 # Kohn–Sham DFT with PBE
 ks_result = ks(h2o, basis_name="sto-3g", functional="pbe")
-print(f"KS-PBE energy: {ks_result.energy:.6f} Ha")
+print(f"KS-PBE energy: {ks_result.homo_energy:.6f} Ha")
 ```
 
 ## Running tests
