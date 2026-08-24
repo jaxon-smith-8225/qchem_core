@@ -1,7 +1,7 @@
 # qchem-core
 
 ![tests](https://github.com/jaxon-smith-8225/qchem_core/actions/workflows/tests.yml/badge.svg)
-[![codecov](https://codecov.io/gh/jaxon-smith-8225/qchem_core/branch/main/graph/badge.svg)](https://codecov.io/gh/your-actual-username/qchem_core)
+[![codecov](https://codecov.io/gh/jaxon-smith-8225/qchem_core/branch/main/graph/badge.svg)](https://codecov.io/gh/jaxon-smith-8225/qchem_core)
 ![python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)
 
 A ground-up implementation of Hartree–Fock and Kohn–Sham DFT in Python,
